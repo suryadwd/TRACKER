@@ -1,3 +1,5 @@
+const Driver = require('../models/driver.model')
+
 
 module.exports = {
   registerDriver : async(req, res) => {
@@ -32,7 +34,7 @@ module.exports = {
     try {
       
       const {id} = req.params
-      const {lat, log} = req.body
+      const {lat, lng} = req.body
 
       const driver = await Driver.findById(id)
       if(!driver) return res.status(404).json({
@@ -40,7 +42,7 @@ module.exports = {
         message: "Driver not found"
       })
 
-      driver.location = { lat, log }
+      driver.location = { lat, lng }
 
       await driver.save()
 
