@@ -14,9 +14,9 @@ module.exports = {
       })
   
       await newOrder.save()
-      res.status(201).json({ message: 'Order placed successfully', order: newOrder })
+      return res.status(201).json({ message: 'Order placed successfully', order: newOrder })
     } catch (error) {
-      res.status(500).json({ message: 'Internal server error' })
+      return res.status(500).json({ message: 'Internal server error' })
       console.log(error)
     }
   },
@@ -30,9 +30,9 @@ module.exports = {
     order.driver = driverId
     order.status = 'Assigned'
     await order.save()
-    res.status(200).json({ message: 'Driver assigned successfully', order })
+    return res.status(200).json({ message: 'Driver assigned successfully', order })
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' })
+    return res.status(500).json({ message: 'Internal server error' })
     console.log(error)
   }
   },
@@ -41,9 +41,23 @@ module.exports = {
       const { orderId } = req.params
       const order = await Order.findById(orderId).populate('driver')
       if (!order) return res.status(404).json({ message: 'Order not found' })
-      res.status(200).json({ message: 'Order details fetched successfully', order })
+      return res.status(200).json({ message: 'Order details fetched successfully', order })
     } catch (error) {
-      res.status(500).json({ message: 'Internal server error' })
+      return res.status(500).json({ message: 'Internal server error' })
+      console.log(error)
+    }
+  },
+  updateOrderStatus: async(req, res) => {
+    try {
+      const { orderId } = req.params
+      const { status } = req.body
+      const order = await Order.findById(orderId)
+      if (!order) return res.status(404).json({ message: 'Order not found' })
+      order.status = status
+      await order.save()
+      return res.status(200).json({ message: 'Order status updated successfully', order })
+    } catch (error) {
+      return res.status(500).json({ message: 'Internal server error' })
       console.log(error)
     }
   }
