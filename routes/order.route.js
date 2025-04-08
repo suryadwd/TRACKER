@@ -7,8 +7,8 @@ router.post("/place", placeOrder);
 
 router.put("/assign-driver", assignDriverForOrder);
 
-router.get("/:orderId/status", getOrderDetails);
+router.get("/status/:orderId", getOrderDetails);
 
-router.put("/:orderId/status", updateOrderStatus);
+router.put("/status/:orderId", updateOrderStatus);
 
 module.exports = router;
