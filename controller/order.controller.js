@@ -35,5 +35,16 @@ module.exports = {
     res.status(500).json({ message: 'Internal server error' })
     console.log(error)
   }
+  },
+  getOrderDetails: async(req, res) => {
+    try {
+      const { orderId } = req.params
+      const order = await Order.findById(orderId).populate('driver')
+      if (!order) return res.status(404).json({ message: 'Order not found' })
+      res.status(200).json({ message: 'Order details fetched successfully', order })
+    } catch (error) {
+      res.status(500).json({ message: 'Internal server error' })
+      console.log(error)
+    }
   }
 }
