@@ -20,7 +20,7 @@ module.exports = {
       console.log(error)
     }
   },
-  assignDriverToOrder: async(req, res) => {
+  assignDriverForOrder: async(req, res) => {
   try {
     const { orderId, driverId } = req.body
     const order = await Order.findById(orderId)
