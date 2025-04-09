@@ -17,8 +17,34 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
+// using the socket.io library
 
-app.listen(PORT, () => {
+const socketIo = require('socket.io')
+const http = require('http') // http to creata a server
+const server = http.createServer(app)  //crete a server of app(express container) 
+
+// SOCKET.IO setup
+const io = socketIo(server, {
+  cors:{
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+})
+
+io.on("connection",(socket)=>{
+  console.log("Driver connected", socket.id)
+  socket.on("driverLocation",(data) => {
+    console.log("New location: ", data)
+    io.emit(`LocationUpdates: ${data.driverId}`, data)
+  })
+  socket.on("disconnect", () => {
+    console.log("Driver disconnected", socket.id)
+  })
+})
+
+//till here code in between 
+
+server.listen(PORT, () => {   //aap ke jaga server le liya
   console.log(`Server running on port ${PORT}`)
   connectDb()
 })
