@@ -1,5 +1,6 @@
 const Driver = require('../models/driver.model')
 const Order = require('../models/order.model')
+const getEta = require('../utils/getEta')
 
 module.exports = {
   placeOrder : async(req, res) => {
@@ -27,8 +28,10 @@ module.exports = {
     const driver = await Driver.findById(driverId)
     if (!order)  return res.status(404).json({ message: 'Order not found' })
     if (!driver)  return res.status(404).json({ message: 'driver not found' })
+    const etaData = await getEta()
     order.driver = driverId
     order.status = 'Assigned'
+    order.eta = etaData.duration
     await order.save()
     return res.status(200).json({ message: 'Driver assigned successfully', order })
   } catch (error) {

@@ -6,12 +6,12 @@ module.exports = {
     
     try {
       
-      const {name, vehicle, lat, log} = req.body
+      const {name, vehicle, lat, lng} = req.body
 
       const newDriver = new Driver({
         name,
         vehicle,
-        location:{ lat, log } 
+        location:{ lat, lng } 
       })
 
       await newDriver.save()

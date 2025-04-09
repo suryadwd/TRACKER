@@ -4,7 +4,17 @@ const driverSchmea = new mongoose.Schema({
 
   name: { type: String, required: true},
   vehicle: { type: String, required: true},
-  location: { type: Object, required: true},
+  location: {
+    lat: {
+      type: Number,
+      required: true
+    },
+    lng: {
+      type: Number,
+      required: true
+    }
+  },
+
   status: { type: String, enum: ["Available", "On Delivery"], default: "Available"}
 }, { timestamps: true });
 
