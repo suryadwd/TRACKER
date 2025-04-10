@@ -10,7 +10,7 @@ const orderSchema = new mongoose.Schema({
     lng: { type: Number, required: true} 
   },
   driver: { type: mongoose.Schema.Types.ObjectId, ref: 'Driver', required: true},
-
+  eta:{ type: String, default:null},
 },{timestamps: true});
 
 module.exports = mongoose.model('Order', orderSchema)

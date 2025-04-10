@@ -28,7 +28,12 @@ module.exports = {
     const driver = await Driver.findById(driverId)
     if (!order)  return res.status(404).json({ message: 'Order not found' })
     if (!driver)  return res.status(404).json({ message: 'driver not found' })
-    const etaData = await getEta()
+    const etaData = await getEta(
+      driver.location.lat,
+      driver.location.lng, 
+      order.customerLocation.lat,
+      order.customerLocation.lng
+    )
     order.driver = driverId
     order.status = 'Assigned'
     order.eta = etaData.duration
