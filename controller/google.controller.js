@@ -1,7 +1,7 @@
 const Order = require('../models/order.model');
 const Driver = require('../models/driver.model');
 const  getETA  = require('../utils/getETA');
-
+const getAddress = require('../utils/getAddress');
 module.exports = {
   loationDetails: async (req, res) => {
     try {
@@ -23,7 +23,7 @@ module.exports = {
     try {
       const {lat, lng} = req.body
       if(!lat || !lng) return res.status(400).json({ message: 'Latitude and Longitude are required' });
-      const address = await getAddress.getAddress(lat, lng)
+      const address = await getAddress(lat, lng)
       if (!address) return res.status(404).json({ message: 'Address not found' });
       return res.status(200).json({ message: 'Address fetched successfully', address })
     } catch (error) {

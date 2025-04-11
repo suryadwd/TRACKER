@@ -4,14 +4,16 @@ const cors = require('cors')
 const dotenv = require('dotenv').config()
 const {connectDb} = require('./config/db')
 const PORT = process.env.PORT 
-const driverRouter = require("./routes/driver.route")
-const orderRouter = require("./routes/order.route")
+const driverRouter = require("./routes/driver.routes")
+const orderRouter = require("./routes/order.routes")
+const mapsRouter = require("./routes/google.routes")
 
 app.use(cors())
 app.use(express.json())
 
 app.use('/driver', driverRouter)
 app.use('/order', orderRouter)
+app.use('/maps', mapsRouter)
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
