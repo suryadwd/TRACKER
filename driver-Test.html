@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Driver Location Simulator</title>
+</head>
+<body>
+  <h1>Real-Time Driver Location Simulator</h1>
+
+  <label for="driverId">Driver ID:</label>
+  <input type="text" id="driverId" placeholder="Enter driver ID" />
+  <br /><br />
+
+  <button onclick="startSimulation()">Start Location Simulation</button>
+
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script>
+    const socket = io("http://localhost:8080,"); // Replace if your server runs elsewhere
+
+    let interval;
+
+    function startSimulation() {
+      const driverId = document.getElementById("driverId").value;
+      if (!driverId) {
+        alert("Please enter a driver ID!");
+        return;
+      }
+
+      let lat = 28.6139; // Initial location (e.g. Delhi)
+      let lng = 77.2090;
+
+      interval = setInterval(() => {
+        lat += (Math.random() - 0.5) * 0.001;
+        lng += (Math.random() - 0.5) * 0.001;
+
+        const data = {
+          driverId: driverId,
+          lat: parseFloat(lat.toFixed(6)),
+          lng: parseFloat(lng.toFixed(6))
+        };
+
+        console.log("Emitting location: ", data);
+        socket.emit("driverLocation", data);
+      }, 2000); // every 2 seconds
+    }
+  </script>
+</body>
+</html>
