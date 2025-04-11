@@ -9,6 +9,6 @@ router.put("/assign-driver", assignDriverForOrder);
 
 router.get("/status/:orderId", getOrderDetails);
 
-router.put("/status/:orderId", updateOrderStatus);
+router.put("/update/:orderId", updateOrderStatus);
 
 module.exports = router;
