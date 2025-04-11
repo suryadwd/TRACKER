@@ -29,29 +29,29 @@ module.exports = {
       console.log(error)
     }
   },
-  assignDriverForOrder: async(req, res) => {
-  try {
-    const { orderId, driverId } = req.body
-    const order = await Order.findById(orderId)
-    const driver = await Driver.findById(driverId)
-    if (!order)  return res.status(404).json({ message: 'Order not found' })
-    if (!driver)  return res.status(404).json({ message: 'driver not found' })
-    const etaData = await getEta(
-      driver.location.lat,
-      driver.location.lng, 
-      order.customerLocation.lat,
-      order.customerLocation.lng
-    )
-    order.driver = driverId
-    order.status = 'Assigned'
-    order.eta = etaData.duration
-    await order.save()
-    return res.status(200).json({ message: 'Driver assigned successfully', order })
-  } catch (error) {
-    return res.status(500).json({ message: 'Internal server error' })
-    console.log(error)
-  }
-  },
+  // assignDriverForOrder: async(req, res) => {
+  // try {
+  //   const { orderId, driverId } = req.body
+  //   const order = await Order.findById(orderId)
+  //   const driver = await Driver.findById(driverId)
+  //   if (!order)  return res.status(404).json({ message: 'Order not found' })
+  //   if (!driver)  return res.status(404).json({ message: 'driver not found' })
+  //   const etaData = await getEta(
+  //     driver.location.lat,
+  //     driver.location.lng, 
+  //     order.customerLocation.lat,
+  //     order.customerLocation.lng
+  //   )
+  //   order.driver = driverId
+  //   order.status = 'Assigned'
+  //   order.eta = etaData.duration
+  //   await order.save()
+  //   return res.status(200).json({ message: 'Driver assigned successfully', order })
+  // } catch (error) {
+  //   return res.status(500).json({ message: 'Internal server error' })
+  //   console.log(error)
+  // }
+  // },
   getOrderDetails: async(req, res) => {
     try {
       const { orderId } = req.params

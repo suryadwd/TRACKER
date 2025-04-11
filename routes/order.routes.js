@@ -5,7 +5,7 @@ const { placeOrder, assignDriverForOrder, getOrderDetails, updateOrderStatus} = 
 
 router.post("/place", placeOrder);
 
-router.put("/assign-driver", assignDriverForOrder);
+// router.put("/assign-driver", assignDriverForOrder);
 
 router.get("/status/:orderId", getOrderDetails);
 
