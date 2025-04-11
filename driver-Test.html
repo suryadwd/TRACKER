@@ -13,9 +13,9 @@
 
   <button onclick="startSimulation()">Start Location Simulation</button>
 
-  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script src="http://localhost:8080/socket.io/socket.io.js"></script>
   <script>
-    const socket = io("http://localhost:8080,"); // Replace if your server runs elsewhere
+    const socket = io("http://localhost:8080"); // Replace if your server runs elsewhere
 
     let interval;
 
