@@ -18,5 +18,17 @@ module.exports = {
       return res.status(500).json({ message: 'Internal server error' });
       console.log(error)
     }
+  },
+  geoCodeLocation: async (req, res) => {
+    try {
+      const {lat, lng} = req.body
+      if(!lat || !lng) return res.status(400).json({ message: 'Latitude and Longitude are required' });
+      const address = await getAddress.getAddress(lat, lng)
+      if (!address) return res.status(404).json({ message: 'Address not found' });
+      return res.status(200).json({ message: 'Address fetched successfully', address })
+    } catch (error) {
+      return res.status(500).json({ message: 'Internal server error' });
+      console.log(error)
+    }
   }
 }
