@@ -1,187 +1,207 @@
-# Driver Tracking API
 
-A RESTful API for tracking driver locations in real-time for ride-sharing or delivery services applications.
+# 🚚 Driver Tracking API
 
-## Tech Stack
+A RESTful API for managing and tracking real-time driver locations for delivery/ride-sharing services.
+
+## ⚙️ Tech Stack
 
 - Node.js
 - Express.js
 - MongoDB
 - Mongoose
 
-The API will be available at `http://localhost:6000`.
+> Base URL: `http://localhost:6000`
 
-## Driver Routes
+---
 
-- **Register a new driver**
-  - `POST /driver/register`
-  - Request body:
-    ```json
-    {
-      "name": "John Doe",
-      "vehicle": "Toyota Camry",
-      "lat": 37.7749,
-      "log": -122.4194
-    }
-    ```
+## 👤 Driver Routes
 
-- **Get driver location**
-  - `GET /driver/location/:id`
+### ✅ Register a New Driver
 
-- **Update driver location**
-  - `PUT /driver/location/:id`
-  - Request body:
-    ```json
-    {
-      "lat": 37.7749,
-      "lng": -122.4194
-    }
-    ```
-
-# Order Routes 
-
-This documentation covers the order management endpoints for the driver tracking application.
-
-## Available Endpoints
-
-### Place a New Order
-
-Creates a new customer order in the system.
-
-- **URL**: `/order/place`
 - **Method**: `POST`
-- **Request Body**:
-  ```json
-  {
+- **URL**: `/driver/register`
+
+Registers a new driver with initial location data.
+
+#### 🔻 Request Body:
+```json
+{
+  "name": "John Doe",
+  "vehicle": "Toyota Camry",
+  "lat": 37.7749,
+  "lng": -122.4194
+}
+```
+
+---
+
+### 📍 Get Driver Location
+
+- **Method**: `GET`
+- **URL**: `/driver/location/:id`
+
+Fetches current location and details of a driver.
+
+---
+
+### 🔁 Update Driver Location
+
+- **Method**: `PUT`
+- **URL**: `/driver/location/:id`
+
+Updates real-time location of a driver.
+
+#### 🔻 Request Body:
+```json
+{
+  "lat": 37.7750,
+  "lng": -122.4180
+}
+```
+
+---
+
+## 📦 Order Routes
+
+### 🛒 Place a New Order (Auto Driver Assignment)
+
+- **Method**: `POST`
+- **URL**: `/order/place`
+
+Places a new customer order and **automatically assigns an available driver**.
+
+#### 🔻 Request Body:
+```json
+{
+  "customerName": "Jane Smith",
+  "customerAddress": "123 Main Street, Anytown",
+  "customerPhone": "555-123-4567",
+  "lat": 37.7749,
+  "lng": -122.4194
+}
+```
+
+#### ✅ Success Response:
+```json
+{
+  "message": "Order placed successfully",
+  "order": {
+    "_id": "ORDER_ID",
     "customerName": "Jane Smith",
     "customerAddress": "123 Main Street, Anytown",
     "customerPhone": "555-123-4567",
-    "lat": 37.7749,
-    "lng": -122.4194
+    "customerLocation": {
+      "lat": 37.7749,
+      "lng": -122.4194
+    },
+    "status": "Pending",
+    "createdAt": "..."
+  },
+  "driver": {
+    "name": "John Doe",
+    "vehicle": "Toyota Camry"
   }
-  ```
-- **Success Response**:
-  - **Code**: 201 Created
-  - **Content**:
-    ```json
-    {
-      "message": "Order placed successfully",
-      "order": {
-        "_id": "60d21b4667d0d8992e610c85",
-        "customerName": "Jane Smith",
-        "customerAddress": "123 Main Street, Anytown",
-        "customerPhone": "555-123-4567",
-        "customerLocation": {
-          "lat": 37.7749,
-          "lng": -122.4194
-        },
-        "status": "Pending",
-        "createdAt": "2023-06-22T18:40:39.962Z"
-      }
-    }
-    ```
-- **Error Response**:
-  - **Code**: 500 Internal Server Error
-  - **Content**: `{ "message": "Internal server error" }`
+}
+```
 
-### Assign Driver to Order
+#### ❌ Error Responses:
+- 400 Bad Request: `All fields are required`
+- 404 Not Found: `No available drivers`
+- 500 Internal Server Error
 
-Assigns a specific driver to fulfill a customer order.
+---
 
-- **URL**: `/order/assign-driver`
-- **Method**: `PUT`
-- **Request Body**:
-  ```json
-  {
-    "orderId": "60d21b4667d0d8992e610c85",
-    "driverId": "60d21b4667d0d8992e610c86"
-  }
-  ```
-- **Success Response**:
-  - **Code**: 200 OK
-  - **Content**:
-    ```json
-    {
-      "message": "Driver assigned successfully",
-      "order": {
-        "_id": "60d21b4667d0d8992e610c85",
-        "customerName": "Jane Smith",
-        "status": "Assigned",
-        "driver": "60d21b4667d0d8992e610c86"
-      }
-    }
-    ```
-- **Error Responses**:
-  - **Code**: 404 Not Found
-  - **Content**: `{ "message": "Order not found" }` or `{ "message": "Driver not found" }`
-  - **Code**: 500 Internal Server Error
-  - **Content**: `{ "message": "Internal server error" }`
+### 📋 Get Order Details
 
-### Get Order Details
-
-Retrieves detailed information about a specific order, including assigned driver information.
-
-- **URL**: `/order/status/:orderId`
 - **Method**: `GET`
-- **URL Parameters**: `orderId=[MongoDB ObjectId]`
-- **Success Response**:
-  - **Code**: 200 OK
-  - **Content**:
-    ```json
-    {
-      "message": "Order details fetched successfully",
-      "order": {
-        "_id": "60d21b4667d0d8992e610c85",
-        "customerName": "Jane Smith",
-        "customerAddress": "123 Main Street, Anytown",
-        "customerPhone": "555-123-4567",
-        "customerLocation": {
-          "lat": 37.7749,
-          "lng": -122.4194
-        },
-        "status": "In Progress",
-        "driver": {
-          "_id": "60d21b4667d0d8992e610c86",
-          "name": "John Doe",
-          "vehicle": "Toyota Camry",
-          "location": {
-            "lat": 37.7750,
-            "lng": -122.4180
-          }
-        },
-        "createdAt": "2023-06-22T18:40:39.962Z"
-      }
-    }
-    ```
-- **Error Responses**:
-  - **Code**: 404 Not Found
-  - **Content**: `{ "message": "Order not found" }`
-  - **Code**: 500 Internal Server Error
-  - **Content**: `{ "message": "Internal server error" }`
-
-### Update Order Status
-
-Updates the status of an existing order.
-
 - **URL**: `/order/status/:orderId`
+
+Retrieves full order details including the assigned driver.
+
+#### ✅ Success Response:
+```json
+{
+  "message": "Order details fetched successfully",
+  "order": {
+    "_id": "ORDER_ID",
+    "customerName": "Jane Smith",
+    "customerAddress": "123 Main Street, Anytown",
+    "customerPhone": "555-123-4567",
+    "customerLocation": {
+      "lat": 37.7749,
+      "lng": -122.4194
+    },
+    "status": "Assigned",
+    "driver": {
+      "_id": "DRIVER_ID",
+      "name": "John Doe",
+      "vehicle": "Toyota Camry",
+      "location": {
+        "lat": 37.7750,
+        "lng": -122.4180
+      }
+    },
+    "createdAt": "..."
+  }
+}
+```
+
+#### ❌ Error Responses:
+- 404 Not Found: `Order not found`
+- 500 Internal Server Error
+
+---
+
+### 🔄 Update Order Status
+
 - **Method**: `PUT`
-- **URL Parameters**: `orderId=[MongoDB ObjectId]`
-- **Request Body**:
-  ```json
-  {
+- **URL**: `/order/status/:orderId`
+
+Updates the status of an existing order (e.g., Picked up, Delivered).
+
+#### 🔻 Request Body:
+```json
+{
+  "status": "Delivered"
+}
+```
+
+#### ✅ Success Response:
+```json
+{
+  "message": "Order status updated successfully",
+  "order": {
+    "_id": "ORDER_ID",
     "status": "Delivered"
   }
-  ```
-- **Success Response**:
-  - **Code**: 200 OK
-  - **Content**:
-    ```json
-    {
-      "message": "Order status updated successfully",
-      "order": {
-        "_id": "60d21b4667d0d8992e610c85",
-        "customerName": "Jane Smith",
-        "status": "Delivered"
-      }
-    }
-    ```
+}
+```
+
+#### ❌ Error Responses:
+- 404 Not Found: `Order not found`
+- 500 Internal Server Error
+
+---
+
+### 🧨 [Deprecated] Assign Driver Manually
+
+- **Method**: `PUT`
+- **URL**: `/order/assign-driver`
+
+**Deprecated:** Driver is now auto-assigned in `/order/place`. No longer required.
+
+---
+
+## 🛰️ Coming Soon: Real-Time Tracking (via Socket.IO)
+
+**Driver emits:**
+- `locationUpdate` → `{ driverId, lat, lng }`
+
+**Client receives:**
+- `locationUpdate` → Updated driver position in real-time
+
+Stay tuned for the live map integration 🎯
+
+---
+
+> Built with ❤️ using MERN stack + WebSockets + Google Maps API
