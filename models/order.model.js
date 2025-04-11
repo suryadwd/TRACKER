@@ -9,7 +9,7 @@ const orderSchema = new mongoose.Schema({
     lat: { type: Number, required: true},
     lng: { type: Number, required: true} 
   },
-  driver: { type: mongoose.Schema.Types.ObjectId, ref: 'Driver', required: true},
+  driver: { type: mongoose.Schema.Types.ObjectId, ref: 'Driver', default: null},
   eta:{ type: String, default:null},
 },{timestamps: true});
 

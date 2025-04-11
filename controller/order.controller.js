@@ -6,16 +6,24 @@ module.exports = {
   placeOrder : async(req, res) => {
     try {
       const{ customerName, customerAddress, customerPhone, lat, lng } = req.body
-    
+      if(!customerName || !customerAddress || !customerPhone || !lat || !lng)  return res.status(400).json({ message: 'All fields are required' })
+      
+      const availableDriver = await Driver.findOne({ status: 'Available' })
+      if(!availableDriver) return res.status(404).json({ message: 'No available drivers' })
+
       const newOrder = new Order({
         customerName,
         customerAddress,
         customerPhone,
-        customerLocation: { lat, lng }
+        customerLocation: { lat, lng },
+        driver: availableDriver._id,
       })
-  
+
       await newOrder.save()
-      return res.status(201).json({ message: 'Order placed successfully', order: newOrder })
+      return res.status(201).json({ message: 'Order placed successfully', order: newOrder,  driver: {
+        name: availableDriver.name,
+        vehicle: availableDriver.vehicle
+      }})
     } catch (error) {
       return res.status(500).json({ message: 'Internal server error' })
       console.log(error)
