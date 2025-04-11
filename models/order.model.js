@@ -11,6 +11,12 @@ const orderSchema = new mongoose.Schema({
   },
   driver: { type: mongoose.Schema.Types.ObjectId, ref: 'Driver', default: null},
   eta:{ type: String, default:null},
+  status: {
+    type: String,
+    enum: ['Pending', 'Assigned', 'Picked Up', 'Delivered'], // example statuses
+    default: 'Pending'
+  }
+  
 },{timestamps: true});
 
 module.exports = mongoose.model('Order', orderSchema)
