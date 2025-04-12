@@ -34,10 +34,15 @@
         lng += (Math.random() - 0.5) * 0.001;
 
         const data = {
-          driverId: driverId,
-          lat: parseFloat(lat.toFixed(6)),
-          lng: parseFloat(lng.toFixed(6))
-        };
+  driverId: driverId,
+  lat: parseFloat(lat.toFixed(6)),
+  lng: parseFloat(lng.toFixed(6)),
+  destination: {
+    lat: 28.6200, // dummy location
+    lng: 77.2100
+  }
+};
+
 
         console.log("Emitting location: ", data);
         socket.emit("driverLocation", data);
