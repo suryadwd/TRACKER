@@ -37,7 +37,7 @@ io.on("connection",(socket)=>{
   console.log("Driver connected", socket.id)
   socket.on("driverLocation",(data) => {
     console.log("New location: ", data)
-    io.emit(`LocationUpdates: ${data.driverId}`, data)
+    io.emit("driverLocation", data)
   })
   socket.on("disconnect", () => {
     console.log("Driver disconnected", socket.id)
