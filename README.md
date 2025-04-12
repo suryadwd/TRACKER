@@ -183,15 +183,6 @@ Updates the status of an existing order (e.g., Picked up, Delivered).
 
 ---
 
-### 🧨 [Deprecated] Assign Driver Manually
-
-- **Method**: `PUT`
-- **URL**: `/order/assign-driver`
-
-**Deprecated:** Driver is now auto-assigned in `/order/place`. No longer required.
-
----
-
 ## 🛰️ Coming Soon: Real-Time Tracking (via Socket.IO)
 
 **Driver emits:**
